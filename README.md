@@ -1,2 +1,3 @@
 # MoreJokers
-MoreJokers Mod
+全新的小丑牌模组！
+添加了45张小丑、1张幻灵牌、2个Boss盲注和1个牌组
