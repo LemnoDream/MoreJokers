@@ -1,0 +1,13 @@
+{
+    "id": "mj",
+    "name": "More Jokers",
+    "author": ["Ldream、一只鸡昊"],
+    "description": "我们加入了更多小丑！感谢游玩！",
+    "prefix": "mj",
+    "main_file": "morejokers.lua",
+    "badge_colour": "d4af37",
+    "dependencies": [
+        "Steamodded (>=1.0.0~)"
+    ],
+    "version": "1.0.0"
+}
