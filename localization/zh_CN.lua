@@ -1,6 +1,7 @@
 return {
     misc={
           v_dictionary={
+               a_score = "+#1#分数",
                a_chips_mod = "+#1#筹码",
                a_xchips = "X#1#筹码",
                a_discards="弃牌次数+#1#",
@@ -19,6 +20,16 @@ return {
                k_mj_probability_increase_ex = "概率增加！",
                k_mj_keep_moving = "继续前进！",
                k_mj_wheel = "+1命运之轮！",
+               k_mj_castling = "王车易位！",
+               k_mj_aoos = "清一色！",
+               k_mj_egg = "彩蛋！",
+               k_mj_enhancement = "增强！",
+               k_mj_negative = "颠倒！",
+               k_mj_knight = "负片！",
+               mj_m_0 = "阈界（荧光灯嗡嗡声）",
+               mj_m_matrix = "矩阵（无音乐）",
+               mj_m_invert = "颠倒（颠倒音乐）",
+               mj_set_music = "音效/音乐",
                },
           challenge_names={
                c_mj_scratcher = '刮刮乐',
@@ -29,7 +40,159 @@ return {
                },
           },
     descriptions={
-    Joker={
+    Joker={ 
+            j_mj_foundation={
+                name="基金会",
+                text={
+                    "回合{C:attention}开始或结束{}时",
+                    "有{C:green}#3#/#4#{}的机率摧毁左边的小丑",
+                    "并增加{X:mult,C:white}X#2#{}倍率",
+                    "{C:inactive}（当前为{X:mult,C:white}X#1#{}{C:inactive}倍率）",
+                    
+                },
+            },
+            
+            j_mj_matrix={
+                name="矩阵",
+                text={ {
+                    "如果出牌和弃牌次数{V:1}累计次数{}为{V:1}15{}",
+                    "每弃牌一次牌",
+                    "增加{B:1,C:white}X#4#{}倍率",
+                   },
+                   {
+                    "如果累计为{V:1}60{}{C:inactive}）",
+                    "则增加{B:1,C:white}X#5#{}倍率",
+                   },
+                   {
+                    "{C:inactive}（当前为{B:1,C:white}X#3#{}{C:inactive}倍率）",
+                    "{C:inactive}（当前累计为{V:1}#1#{}{C:inactive}）",
+                   },
+                },
+            },
+            
+            j_mj_sacrifice={
+                name="献祭",
+                text={
+                    "售出{C:attention}任何卡牌{}时",
+                    "立即获得盲注所需分数的",
+                    "{C:green}10%",
+                    
+                },
+            },
+            j_mj_invert={
+                name="{C:dark_edition}颠倒",
+                text={
+                    "{C:dark_edition}消牌耗购在买变",
+                    "{C:dark_edition}时为{C:edition}负片",
+                    
+                },
+            },
+            
+            j_mj_presbyopia={
+                name="老花眼",
+                text={
+                    "如果每回合的{C:attention}第一次出牌",
+                    "是一张单独的{C:attention}人头牌",
+                    "则将其进行{C:green}随机增强",
+                },
+            },
+            
+            j_mj_hellraier={
+                name="{V:1}地狱狂徒+",
+                text={
+                    "如果出牌次数大于等于{C:blue}#1#",
+                    "{C:green}#2#{}出牌次数并",
+                    "{C:attention}直接获得{}盲注所需分数的{C:green}50%",
+                    "{s:0.8,C:inactive}“你谁啊？”",
+                },
+            },
+            
+            j_mj_threshold={
+                name="阈界",
+                text={
+                    "如果击败盲注时",
+                    "出牌次数为{V:1}0{}",
+                    "给予{B:1,C:white}X#2#{}倍率",
+                    "{C:inactive}（当前为{} {B:1,C:white}X#1#{} {C:inactive}倍率）{}",
+                    "{s:0.8,C:inactive}“升级时有{s:0.8,C:green}#4#/#5#{}{s:0.8,C:inactive}的概率触发{s:0.8,C:dark_edition}彩蛋 ”",
+                },
+            },
+            
+            j_mj_rhyniognatha={
+                name="莱尼虫",
+                text={
+                    "选择{C:attention}盲注时",
+                    "摧毁左侧的小丑牌",
+                    "并有{C:green}#2#/#3#{}的概率为右侧小丑牌",
+                    "添加{C:dark_edition}负片{}版本并重置概率",
+                    "每次摧毁小丑牌时{C:green}概率增加",
+                    "{C:inactive}（左侧小丑必须被摧毁）",
+                },
+            },
+            
+            j_mj_aoos={
+                name="清一色",
+                text={
+                    "如果打出的牌中包含",
+                    "{C:attention}#1#",
+                    "所有的计分{C:attention}增强牌",
+                    "变为{C:attention}万能牌",
+                },
+            },
+            
+            j_mj_homogenization={
+                name="同质化",
+                text={
+                    "所有{C:attention}小丑牌",
+                    "和{C:attention}补充包",
+                    "在商店均为{C:money}$5",
+                },
+            },
+            
+            j_mj_sudoku={
+                name="数独",
+                text={
+                    "如果留在手牌中的",
+                    "所有牌都是{C:attention}数字牌{}",
+                    "则重新触发所有打出的牌",
+                },
+            },
+            
+            j_mj_dream_no_more={
+                name="不再有梦",
+                text={
+                    "击败{C:attention}Boss盲注{}后",
+                    "创建一个免费的",
+                    "{C:dark_edition}#1#",
+                },
+            },
+            
+            j_mj_geocentric_model={
+                name="地心说",
+                text={
+                    "使用{C:planet}地球{}时",
+                    "给予一张{C:spectral}幻灵牌",
+                },
+            },
+            
+            j_mj_castling={
+                name="王车易位",
+                text={
+                    "如果有{C:attention}K{}和{C:attention}3{}计分",
+                    "获得{C:red}+#1#{}弃牌次数",
+                },
+            },
+            
+            j_mj_sun={
+                name="太阳",
+                text={
+                    "如果售出或摧毁这张卡",
+                    "{C:red}立即输掉本局",
+                    "选择盲注时",
+                    "{C:attention}盲注{}减少{C:green}50%{}分数",
+                },
+            },
+            
             j_mj_cavendish={
                 name="卡文迪什",
                 text={
@@ -176,8 +339,7 @@ return {
         	j_mj_regret_med={
         	    name = '后悔药',
         		text = {
-	            		"选择{C:attention}盲注{}后",
-	            		"{C:attention}失去所有弃牌次数",
+	            		"如果本回合{C:attention}没有{}使用过弃牌",
 	            		"{X:mult,C:white}X#1#{}倍率",
 	        	},
         	},
@@ -370,11 +532,11 @@ return {
             j_mj_joker_of_fortune={
                 name="命运之丑",
                 text = {
+                        "{X:mult,C:white}X#1#{}倍率",
 			            "{C:attention}命运之轮{}每生效一次",
                         "{X:mult,C:white}X#2#{}倍率",
                         "每失效一次",
                         "失去{X:mult,C:white}X#3#{}倍率",
-                        "{C:inactive}（当前为{X:mult,C:white}X#1#{}{C:inactive}倍率）{}",
 	            },
             },
             
@@ -456,7 +618,7 @@ return {
                 text = {
 			            "在离开商店时",
 			            "清除右侧小丑牌的",
-			            "{C:attention}易腐{}和{C:attention}摧毁{}贴纸",
+			            "{B:2,C:white}易腐{}和{B:1,C:white}摧毁{}贴纸",
 	            },
             },
             
@@ -472,7 +634,7 @@ return {
             j_mj_jimbo={
                 name = '金宝',
                 text = {
-                        "每第{C:attention}4{}次出牌时",
+                        "每第{C:attention}#3#{}次出牌时",
                         "给予{X:mult,C:white}X#1#{}倍率",
                         "{C:inactive}（当前为{}{X:mult,C:white}X#2#{}{C:inactive}倍率）{}",
                         "{C:inactive}（#4#）",
@@ -491,7 +653,7 @@ return {
                 },
             },
     },
-
+--牌组
     Back={
             b_mj_normal={
                 name = '普通牌组',
@@ -500,30 +662,33 @@ return {
                 },
             },
     },    
-         
+--增强牌         
     Enhanced={
-            m_mj_soil={
-                name = '泥土牌',
-		        text = {
-			            "{C:mult}+#1#{}倍率",
-			            "无点数无花色",
-		        },
-		    },
+            m_mj_gear={
+                name = "齿轮牌",
+                text = {
+                        "这张牌被",
+                        "留在手中时",
+                        "将给予{X:chips,C:white}X#1#{}筹码",
+                        "手牌中每有一张{C:attention}齿轮牌",
+                        "增加{X:chips,C:white}X#2#{}筹码",
+                },
+          },
 	},
-
+--塔罗牌
     Tarot={
-           c_mj_ace_of_pentacles={
+           c_mj_aopentacles={
                 name = '星币首牌',
         		text = {
             			"增强{C:attention}#1#{}张选定卡牌成为",
-            			"{C:attention}泥土牌",
+            			"{C:attention}齿轮牌",
         		},
            },
     },
 --幻灵牌           
     Spectral={
           c_mj_ascend={
-                name = '超度',
+                name = '飞升',
         		text = {
             			"随机摧毁一张{C:attention}小丑牌",
             			"手牌上限{C:blue}+1",
@@ -548,27 +713,19 @@ return {
                 },	
           },
     },
-    Edition={
-          e_mj_sequins={
-                name = "亮片",
-                text = {
-                        "{X:chips,C:white}X#1#{}筹码",
-                },
-          },
-    },
-    
+--赌注    
     Stake={
           stake_mj_jimb={
                 name = "金宝注",
                 text = {
                     "商店里有可能出现{C:attention}摧毁{}小丑牌",
-                    "{C:inactive,s:0.8}（回合结束时有{C:green,s:0.8}1/5{C:inactive,s:0.8}的概率随机摧毁左边或右边的小丑牌）",
+                    "{C:inactive,s:0.8}（回合结束时有{C:green,s:0.8}1/6{C:inactive,s:0.8}的概率随机摧毁左边或右边的小丑牌）",
                     "{C:inactive,s:0.8}（无视永恒）{C:inactive,s:0.8}",
                     '{s:0.8}之前的所有赌注也都起效'
                 },    
           },
     },
-    
+ --其他   
     Other={
            mj_jimb_sticker={
                 name = "金宝标贴",
@@ -583,34 +740,37 @@ return {
                 name="摧毁",
                 text={
                     "在回合结束时",
-                    "有{C:green}#1#/5{}的概率",
+                    "有{C:green}#1#/6{}的概率",
                     "随机摧毁一张左边或右边的{C:attention}小丑牌",
                     "{C:inactive}（无视永恒）{C:inactive}",
                 },
            },                                
     },
-    
+--模组介绍    
     Mod={
             mj = {
                 name = "更多小丑",
                 text = {
-                    "新增{C:blue}45{}张小丑牌、{C:spectral}1{}张幻灵牌、{C:money}2{}个Boss盲注和{C:attention}1{}个没用牌组",
+                    "新增{C:blue}60{}张小丑牌、{C:spectral}1{}张幻灵牌、{C:tarot}1{}张塔罗牌、",
+                    "全新的{C:red}增强卡、{C:money}2{}个Boss盲注和{C:attention}1{}个没用牌组",
                     "另外还有全新的赌注——{C:red}金{}{C:blue}宝{}注和全新的{C:black}负面{}贴纸",
                     " ",
                     "{C:green}美术＆小丑设计",
                     "一只鸡昊",
                     " ",
-                    "{C:attention}代码",
+                    "{C:attention}美术＆代码",
                     "Ldream",
                     " ",
+                    "{C:red}金{}{C:blue}宝{}注{C:money}贴图",
+                    "{C:attention}LocalThunk",
+                    "{C:inactive}（没错，这是小丑牌的未使用贴图）{C:inactive}",
+                    " ",
+                    "{C:gold}循环之室/Looping the rooms",
+                    "rusino777",
+                    " ",
                     "{C:dark_edition}特别感谢",
-                    "一只鸡昊",
-                    "ARandomMod",
-                    "All in jest",
-                    "Cryptid",
-                    "Maximus",
-                    "Ortalab",
-                    "Wormhole",
+                    "一只鸡昊、ARandomMod、All in jest、Cryptid、LocalThunk",
+                    "Maximus、Ortalab、Wormhole",
                 },
             },
             
@@ -625,13 +785,27 @@ return {
                    "美术是由{C:blue}我(Ldream){}和{C:green}一只鸡昊{}共同完成，不得不说真的很{C:money}拉{}啊…勉强能看吧。",
                    "因为基本没接触过像素画，已经尽力了…{C:red}Sorry。",
                    " ",
-                   "真的很喜欢这款游戏，现在正在为所有{C:blue}小丑{}贴{C:money}金标，",
+                   "真的很喜欢这款游戏，已经为所有{C:blue}小丑{}贴完{C:money}金标，",
                    "很{C:attention}难{}…你们不要去试。",
                    " ",
-                   "以后说不定会支持{C:attention}多语言{}呢？",
+                   "以后说不定会支持{C:attention}更多语言{}呢？",
                    " ",
                    "享受这个模组！",
-                   
+                   " ",
+                   "{C:blue}杏仁水",
+                   "https://backrooms-wiki.wikidot.com/object-1",
+                   " ",
+                   "{C:dark_edition}颠倒",
+                   "https://backrooms-wiki.wikidot.com/level-1-5",
+                   " ",
+                   "{C:money}阈界",
+                   "https://backrooms-wiki.wikidot.com/level-0",
+                   " ",
+                   "{C:white}矩阵",
+                   "https://backrooms-wiki.wikidot.com/level-12",
+                   " ",
+                   "{C:white}SCP{C:black}基{C:red}金{C:black}会{}",
+                   "https://scp-wiki.wikidot.com/",
                 },
             },
     },
