@@ -13,7 +13,7 @@ SMODS.Sticker {
 	end,
 	calculate = function(self, card, context)
     if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-    if pseudorandom("destroies") < G.GAME.probabilities.normal / 5 then
+    if pseudorandom("destroies") < G.GAME.probabilities.normal / 6 then
         local rr = nil
 			for i = 1, #G.jokers.cards do
 				if G.jokers.cards[i] == card then
