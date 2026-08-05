@@ -50,17 +50,16 @@ SMODS.Joker {
         return { vars = { card.ability.extra.Xmult } }
     end,
     calculate = function(self, card, context)
-		if context.joker_main then
+		if context.joker_main and G.GAME.current_round.discards_used == 0 then
 			return {
 				xmult = card.ability.extra.Xmult
 			}
 		end
-        if context.setting_blind then
-            ease_discard(-G.GAME.current_round.discards_left, nil, true)
-            return {
-                    message = localize('k_mj_regret_ex')
-            }
-        end
+		if context.pre_discard and G.GAME.current_round.discards_used == 0 then
+		   return {
+		        message = localize('k_mj_regret_ex')
+		   }
+		end
     end
 }
 --暴躁小丑
@@ -93,7 +92,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 5,
     pos = { x = 9, y = 0 },
     config = { extra = { Xmult = 1, Xmult_gain = 0.5, dollars = 25 } },
     loc_vars = function(self, info_queue, card)
@@ -115,7 +114,7 @@ SMODS.Joker {
 	eternal_compat = false,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 6,
     pos = { x = 7, y = 1 },
     config = { extra = { odds = 8, mult = 10, chips = 80, d_size = 1, hands = 1 } },
     loc_vars = function(self, info_queue, card)
@@ -275,7 +274,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 6,
     pos = { x = 1, y = 2 },
     config = { extra = { chips_mod = 0.2, chips = 1 } },
     loc_vars = function(self, info_queue, card)
@@ -306,7 +305,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 6,
     pos = { x = 4, y = 3 },
     config = { extra = { Xmult = 1, Xmult_gain = 0.3 } },
     loc_vars = function(self, info_queue, card)
@@ -343,7 +342,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 6,
     pos = { x = 5, y = 3 },
     config = { extra = { mult = 2, chips = 10 } },
     loc_vars = function(self, info_queue, card)
@@ -368,7 +367,7 @@ SMODS.Joker {
 	perishable_compat = true,
 	eternal_compat = true,
     rarity = 2,
-    cost = 7,
+    cost = 5,
     atlas = 'morejokers',
     pos = { x = 2, y = 3 },
     config = { extra = { mult = 0, chips = 0, chips_mod = 8 } },
@@ -662,7 +661,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 6,
     pos = { x = 6, y = 4 },
     config = { extra = { Xmult = 1.75, Xmult_gain = 0.75, Xmult_loss = 0.1 } },
     loc_vars = function(self, info_queue, card)
@@ -699,7 +698,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 2,
     atlas = 'morejokers',
-    cost = 7,
+    cost = 5,
     pos = { x = 6, y = 0 },
     config = { extra = { dollars = 2 } },
     loc_vars = function(self, info_queue, card)
@@ -847,6 +846,139 @@ SMODS.Joker {
                     message = localize('k_mj_last'),
                     colour = G.C.BLUE
                 }
+        end
+    end
+}
+--王车易位
+SMODS.Joker {
+    key = "castling",
+    blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 2,
+    atlas = 'morejokers',
+    cost = 6,
+    pos = { x = 9, y = 4 },
+    config = { extra = { d_size = 1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.d_size } }
+    end,
+    calculate = function(self, card, context)
+		if context.joker_main and not context.before and not context.after and not (context.blueprint_card or card).getting_sliced then
+			local kings = 0
+			local castles = 0
+			for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i]:get_id() == 3 then castles = castles + 1 end
+				if context.scoring_hand[i]:get_id() == 13 then kings = kings + 1 end
+			end
+			if kings >= 1 and castles >= 1 then
+               ease_discard(card.ability.extra.d_size)
+                return {
+                    message = localize('k_mj_castling'),
+                    colour = G.C.RED
+                }
+            end
+        end
+    end
+  }
+--地心说
+SMODS.Joker {
+    key = "geocentric_model",
+    blueprint_compat = true,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 2,
+    atlas = 'morejokers',
+    cost = 6,
+    pos = { x = 0, y = 5 },
+    calculate = function(self, card, context)
+    if context.using_consumeable and not context.blueprint and context.consumeable.config.center_key == 'c_earth' and
+      #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            SMODS.add_card {
+                                set = 'Spectral',
+                                key_append = 'mj_geocentric_model'
+                            }
+                            G.GAME.consumeable_buffer = 0
+                            return true
+                        end
+                    }))
+              return {
+                message = localize('k_plus_spectral'),
+                colour = G.C.SECONDARY_SET.Spectral
+            }
+        end
+    end
+   }
+--数独
+SMODS.Joker {
+    key = "sudoku",
+    blueprint_compat = true,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 2,
+    cost = 6,
+    pos = { x = 2, y = 5 },
+    atlas = 'morejokers',
+    loc_vars = function(self, info_queue, card)
+        return { vars = {  } }
+    end,
+    calculate = function(self, card, context)
+    if context.cardarea == G.play and context.repetition then
+       local all_number_cards = false
+            for _, _card in ipairs(G.hand.cards) do
+                if _card:is_face() then
+                    return
+                end
+            end
+            all_number_cards = true
+            if all_number_cards then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = 1,
+                    card = card
+                }
+            end
+        end
+    end
+}
+--清一色
+SMODS.Joker {
+    key = "aoos",
+    blueprint_compat = false,
+    perishable_compat = true,
+    eternal_compat = true,
+    rarity = 2,
+    cost = 6,
+    pos = { x = 4, y = 5 },
+    atlas = 'morejokers',
+    loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+        return { vars = { localize('Flush', 'poker_hands') } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint and (next(context.poker_hands['Flush']) or next(context.poker_hands['Straight Flush']) or next(context.poker_hands['Flush House']) or next(context.poker_hands['Flush Five'])) then
+            local enhanced = {}
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if next(SMODS.get_enhancements(scored_card)) and not scored_card.debuff then
+                    enhanced[#enhanced + 1] = scored_card
+                    scored_card:set_ability(G.P_CENTERS.m_wild)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            return true
+                        end
+                    }))
+                end
+            end
+            if #enhanced > 0 then
+                return {
+                    message = localize('k_mj_aoos'),
+                    colour = G.C.BLUE
+                }
+            end
         end
     end
 }

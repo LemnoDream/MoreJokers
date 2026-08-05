@@ -443,3 +443,81 @@ SMODS.Joker {
         return next(SMODS.find_card('j_madness')) or next(SMODS.find_card('j_mj_paranoia'))
     end
 }
+--同质化
+SMODS.Joker {
+    key = "homogenization",
+    blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 1,
+    atlas = 'morejokers',
+    cost = 5,
+    pos = { x = 3, y = 5 },
+    add_to_deck = function(self, card, from_debuff)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                for k, v in pairs(G.I.CARD) do
+                    if v.set_cost then v:set_cost() end
+                end
+                return true
+            end
+        }))
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                for k, v in pairs(G.I.CARD) do
+                    if v.set_cost then v:set_cost() end
+                end
+                return true
+            end
+        }))
+    end
+}
+
+local card_set_cost_value_ref = Card.set_cost_value
+function Card:set_cost_value()
+    card_set_cost_value_ref(self)
+    if next(SMODS.find_card("j_mj_homogenization")) then
+        if (self.ability.set == 'Joker' or (self.ability.set == 'Booster' )) then self.cost = 5 end
+    end
+end
+--老花眼
+SMODS.Joker {
+    key = "presbyopia",
+    blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 1,
+    atlas = 'morejokers',
+    cost = 6,
+    pos = { x = 8, y = 5 },
+    calculate = function(self, card, context)
+    if context.before and G.GAME.current_round.hands_played == 0 and #context.full_hand == 1 then
+    local faces = false
+            for _, playing_card in ipairs(context.scoring_hand) do
+                if playing_card:is_face() then
+                    faces = true
+                    break
+                end
+            end
+            if faces then
+            local enhancement = SMODS.poll_enhancement { guaranteed = true, options = cen_pool, key = "mj_presbyopia_card" }
+            for k, v in pairs(context.scoring_hand) do
+                v:set_ability(enhancement, true)
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        v:juice_up()
+                        return true
+                    end
+                }))
+            end
+            return {
+                message = localize('k_mj_enhancement'),
+                colour = G.C.FILTER,
+                card = card
+                }
+            end
+        end
+    end
+}

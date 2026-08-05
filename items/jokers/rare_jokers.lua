@@ -178,7 +178,7 @@ SMODS.Joker {
     atlas = 'finger_doctor',
     pos = { x = 0, y = 0 },
     loc_vars = function(self, info_queue, card)
-        return { vars = {  } }
+        return { vars = { colours = { HEX('9453B8FF'), HEX('687EE7FF') } } }
     end,
     in_pool = function(self, args)
         for k, v in pairs(G.jokers.cards) do
@@ -325,3 +325,291 @@ SMODS.Joker {
             end
         end
     }
+--太阳
+SMODS.Joker {
+    key = "sun",
+    blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = false,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 8,
+    pos = { x = 8, y = 4 },
+    calculate = function(self, card, context)
+    if context.selling_self or context.joker_type_destroyed then
+      if G.STAGE == G.STAGES.RUN then 
+        G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false; end
+    end
+    if context.setting_blind then
+            if (G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big' or G.GAME.blind.boss) then
+                return {     
+                    func = function()
+                        if G.GAME.blind.in_blind then       
+                            G.GAME.blind.chips = G.GAME.blind.chips * 0.5
+                            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                            G.HUD_blind:recalculate()
+                            return true
+                        end
+                    end
+                }
+            end
+       end
+  end
+}
+--不再有梦
+SMODS.Joker {
+    key = "dream_no_more",
+    blueprint_compat = true,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 7,
+    pos = { x = 1, y = 5 },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = { key = 'tag_negative', set = 'Tag' }
+        return { vars = { localize { type = 'name_text', set = 'Tag', key = 'tag_negative' } } }
+    end,
+    calculate = function(self, card, context)
+    if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss then
+        G.E_MANAGER:add_event(Event({
+                func = (function()
+                    add_tag({ key = 'tag_negative' })
+                    play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                    play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                    card:juice_up(0.5, 0.5)
+                    return true
+                end)
+            }))
+            return {
+                message = localize('k_mj_knight'),
+                colour = G.C.DARK_EDITION
+            }
+        end
+    end,
+}
+--莱尼虫
+SMODS.Joker {
+    key = "rhyniognatha",
+    blueprint_compat = false,
+	perishable_compat = false,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 7,
+    pos = { x = 5, y = 5 },
+    config = { extra = { odds = 15, ddos = 0 } },
+    loc_vars = function(self, info_queue, card)
+    local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.ddos, card.ability.extra.odds, 'rhyniognatha')
+        return { vars = { card.ability.extra.ddos, numerator, denominator } }
+    end,
+    calculate = function(self, card, context)
+        if context.setting_blind and not card.getting_sliced then
+            local my_ra = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then my_ra = i; break end
+            end
+            if not my_ra then return end
+            local left_card = G.jokers.cards[my_ra - 1]
+            local right_card = G.jokers.cards[my_ra + 1]
+            if left_card and not left_card.ability.eternal then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                    card.ability.extra.ddos = card.ability.extra.ddos + 1
+                        left_card.getting_sliced = true
+                        SMODS.destroy_cards({left_card}, nil, true)
+                        play_sound('slice1', 0.96, 0.65)
+                        card:juice_up(0.5, 0.5)
+                        return true
+                    end
+                 }))
+                    return {
+                          message = localize('k_mj_probability_increase_ex'),
+                          colour = G.C.GREEN
+                        }
+                    end
+                        if SMODS.pseudorandom_probability(card, 'rhyniognatha', card.ability.extra.ddos, card.ability.extra.odds) then
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                local edition = { negative = true}
+                                right_card:set_edition(edition, true)
+                                right_card:juice_up(0.8, 0.5)
+                                card.ability.extra.ddos = 0
+                                return true
+                            end
+                        }))
+                        return {
+                              message = localize('k_reset'),
+                              colour = G.C.RED
+                        }
+                    end
+               end
+          end
+        }
+--阈界
+SMODS.Joker {
+    key = "threshold",
+    blueprint_compat = true,
+	perishable_compat = false,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 8,
+    pos = { x = 6, y = 5 },
+    config = { extra = { Xmult = 1, Xmult_gain = 0.25, Xmult_egg = 3.01, h_remaining = 0, odds = 100 } },
+    loc_vars = function(self, info_queue, card)
+    local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'threshold')
+        return { vars = { card.ability.extra.Xmult, card.ability.extra.Xmult_gain, card.ability.extra.h_remaining, numerator, denominator, colours = { HEX('D4C600FF') } } }
+    end,
+    set_ability = function(self, card, initial)
+        card:set_eternal(true)
+    end,
+    calculate = function(self, card, context)
+    if context.end_of_round and context.game_over == false and G.GAME.current_round.hands_left == card.ability.extra.h_remaining then
+    if SMODS.pseudorandom_probability(card, 'mj_threshold', 1, card.ability.extra.odds) then
+         card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_egg
+         play_sound('mj_loopingrooms')
+         return {
+            message = localize('k_mj_egg'),
+            colours = G.C.GOLD
+         }
+    else
+        card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_gain
+        return {
+            message = localize('k_upgrade_ex'),
+            colours = G.C.GOLD
+        }
+    end
+end
+    if context.joker_main then
+         return {
+             xmult = card.ability.extra.Xmult,
+             }
+         end
+     end
+    }
+--地狱狂徒
+SMODS.Joker {
+    key = "hellraier",
+    blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 8,
+    pos = { x = 7, y = 5 },
+    pixel_size = { h = 90, w = 65 },
+    config = { extra = { h_remaining = 3, hands = -1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.h_remaining, card.ability.extra.hands, colours = { HEX('42E900FF') } } }
+    end,
+    calculate = function(self, card, context)
+    if context.joker_main and G.GAME.current_round.hands_left >= card.ability.extra.h_remaining then
+        ease_hands_played(card.ability.extra.hands)
+        return {
+             score = G.GAME.blind.chips / 2
+            }
+        end
+    end
+   }
+--颠倒
+SMODS.Joker {
+    key = "invert",
+    blueprint_compat = false,
+	perishable_compat = false,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 8,
+    pos = { x = 9, y = 5 },
+    loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = {key = 'e_negative_consumable', set = 'Edition', config = {extra = 1}}
+        return { vars = { } }
+    end,
+    set_ability = function(self, card, initial)
+    local edition = { negative = true}
+    card:set_edition(edition, true)
+    card:set_eternal(true)
+    end,
+    calculate = function(self, card, context)
+    if context.buying_card and context.card and context.card.ability.consumeable and not context.blueprint then
+    if not context.card.edition then
+        G.E_MANAGER:add_event(Event({
+        func = function()
+        if context.card and not context.card.removed then
+          card:juice_up()
+          context.card:set_edition({ negative = true }, true)
+          end
+          return true
+      end
+      }))
+         return {
+             message = localize('k_mj_negative'),
+             colour = G.C.DARK_EDITION
+              }
+          end
+      end
+  end
+}
+--献祭
+SMODS.Joker {
+    key = "sacrifice",
+    blueprint_compat = true,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 10,
+    pos = { x = 0, y = 6 },
+    calculate = function(self, card, context)
+    if context.selling_card then
+       return {
+             score = G.GAME.blind.chips / 10
+            }
+        end
+    end
+   }
+--矩阵
+SMODS.Joker {
+    key = "matrix",
+    blueprint_compat = true,
+	perishable_compat = true,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 8,
+    pos = { x = 1, y = 6 },
+    config = { extra = { cumulative = 0, cumulative_gain = 1, Xmult = 1, Xmult_gain = 0.1, Xmult_mod = 0.3 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.cumulative, card.ability.extra.cumulative_gain, card.ability.extra.Xmult, card.ability.extra.Xmult_gain, card.ability.extra.Xmult_mod, colours = { HEX('A8A8A8FF') } } }
+    end,
+    set_ability = function(self, card, initial)
+        card:set_eternal(true)
+    end,
+    calculate = function(self, card, context)
+    if context.pre_discard or context.before and not context.blueprint then
+        card.ability.extra.cumulative = card.ability.extra.cumulative + card.ability.extra.cumulative_gain
+    end
+    if context.pre_discard and not context.blueprint then
+    if card.ability.extra.cumulative >= 15 and card.ability.extra.cumulative < 60 and not context.blueprint then
+    card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_gain
+         return {
+             message = localize('k_upgrade_ex'),
+             colour = G.C.WHITE
+         }
+    end
+    if card.ability.extra.cumulative >= 60 and not context.blueprint then
+    card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+         return {
+             message = localize('k_upgrade_ex'),
+             colour = G.C.WHITE
+            }
+        end
+    end
+    if context.joker_main then
+         return {
+             xmult = card.ability.extra.Xmult
+             }
+        end
+    end
+   }
