@@ -2,7 +2,7 @@ return {
     misc={
           v_dictionary={
                a_score = "+#1#分数",
-               a_chips_mod = "+#1#筹码",
+               a_chips_mod = "+#1#",
                a_xchips = "X#1#筹码",
                a_discards="弃牌次数+#1#",
                },
