@@ -149,7 +149,11 @@ SMODS.Joker {
         if context.joker_main then
             return {
                 mult = card.ability.extra.mult,
-                chips = card.ability.extra.chips
+                chips = card.ability.extra.chips,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				   }
                }
            end
        end
@@ -253,7 +257,11 @@ end,
             end
         if context.joker_main then
             return {
-                chips = card.ability.extra.chips
+                chips = card.ability.extra.chips,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				}
             }
         end
     end,
@@ -287,13 +295,17 @@ SMODS.Joker {
       card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
       return {
               message = localize { type = 'variable', key = 'a_chips_mod', vars = { card.ability.extra.chips_mod } },
-              colour = G.C.BLUE
+              colour = G.C.CHIPS
             }
         end
         if context.joker_main then
             return {
-                chips = card.ability.extra.chips * G.GAME.round
-            }
+                chips = card.ability.extra.chips * G.GAME.round,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				}
+			}
         end
     end
 }
@@ -354,7 +366,11 @@ SMODS.Joker {
             if text and G.GAME.hands[text] then
                 return {
                     mult = card.ability.extra.mult * G.GAME.hands[text].level,
-                    chips = card.ability.extra.chips * G.GAME.hands[text].level
+                    chips = card.ability.extra.chips * G.GAME.hands[text].level,
+                    chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				    }
                 }
             end
         end
@@ -401,7 +417,11 @@ SMODS.Joker {
         if context.joker_main then
         return {
                 mult = card.ability.extra.mult,
-                chips = card.ability.extra.chips
+                chips = card.ability.extra.chips,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				}
             }
         end
    end

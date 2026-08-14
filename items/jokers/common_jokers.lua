@@ -330,7 +330,11 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                chips = card.ability.extra.chips * #G.jokers.cards
+                chips = card.ability.extra.chips * #G.jokers.cards,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				}
             }
         end
     end,
@@ -360,7 +364,11 @@ SMODS.Joker {
         end
         if context.joker_main then
             return {
-                chips = card.ability.extra.chips
+                chips = card.ability.extra.chips,
+                chip_message = {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+					colour = G.C.CHIPS
+				}
             }
         end
     end,

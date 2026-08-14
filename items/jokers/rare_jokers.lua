@@ -336,9 +336,16 @@ SMODS.Joker {
     cost = 8,
     pos = { x = 8, y = 4 },
     calculate = function(self, card, context)
-    if context.selling_self or context.joker_type_destroyed then
+    if context.selling_self then
       if G.STAGE == G.STAGES.RUN then 
         G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false; end
+    else
+    if context.joker_type_destroyed then
+      local this_card = context.blueprint_card or card
+      if context.card == this_card then
+      if G.STAGE == G.STAGES.RUN then 
+        G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false; end
+    end
     end
     if context.setting_blind then
             if (G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big' or G.GAME.blind.boss) then
@@ -354,6 +361,7 @@ SMODS.Joker {
                 }
             end
        end
+  end
   end
 }
 --不再有梦
@@ -388,64 +396,6 @@ SMODS.Joker {
         end
     end,
 }
---莱尼虫
-SMODS.Joker {
-    key = "rhyniognatha",
-    blueprint_compat = false,
-	perishable_compat = false,
-	eternal_compat = true,
-    rarity = 3,
-    atlas = 'morejokers',
-    cost = 7,
-    pos = { x = 5, y = 5 },
-    config = { extra = { odds = 15, ddos = 0 } },
-    loc_vars = function(self, info_queue, card)
-    local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.ddos, card.ability.extra.odds, 'rhyniognatha')
-        return { vars = { card.ability.extra.ddos, numerator, denominator } }
-    end,
-    calculate = function(self, card, context)
-        if context.setting_blind and not card.getting_sliced then
-            local my_ra = nil
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i] == card then my_ra = i; break end
-            end
-            if not my_ra then return end
-            local left_card = G.jokers.cards[my_ra - 1]
-            local right_card = G.jokers.cards[my_ra + 1]
-            if left_card and not left_card.ability.eternal then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                    card.ability.extra.ddos = card.ability.extra.ddos + 1
-                        left_card.getting_sliced = true
-                        SMODS.destroy_cards({left_card}, nil, true)
-                        play_sound('slice1', 0.96, 0.65)
-                        card:juice_up(0.5, 0.5)
-                        return true
-                    end
-                 }))
-                    return {
-                          message = localize('k_mj_probability_increase_ex'),
-                          colour = G.C.GREEN
-                        }
-                    end
-                        if SMODS.pseudorandom_probability(card, 'rhyniognatha', card.ability.extra.ddos, card.ability.extra.odds) then
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                local edition = { negative = true}
-                                right_card:set_edition(edition, true)
-                                right_card:juice_up(0.8, 0.5)
-                                card.ability.extra.ddos = 0
-                                return true
-                            end
-                        }))
-                        return {
-                              message = localize('k_reset'),
-                              colour = G.C.RED
-                        }
-                    end
-               end
-          end
-        }
 --阈界
 SMODS.Joker {
     key = "threshold",
@@ -613,3 +563,61 @@ SMODS.Joker {
         end
     end
    }
+--莱尼虫
+SMODS.Joker {
+    key = "rhyniognatha",
+    blueprint_compat = false,
+	perishable_compat = false,
+	eternal_compat = true,
+    rarity = 3,
+    atlas = 'morejokers',
+    cost = 7,
+    pos = { x = 5, y = 5 },
+    config = { extra = { odds = 15, ddos = 0 } },
+    loc_vars = function(self, info_queue, card)
+    local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.ddos, card.ability.extra.odds, 'rhyniognatha')
+        return { vars = { card.ability.extra.ddos, numerator, denominator } }
+    end,
+    calculate = function(self, card, context)
+        if context.setting_blind and not card.getting_sliced then
+            local my_ra = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then my_ra = i; break end
+            end
+            if not my_ra then return end
+            local left_card = G.jokers.cards[my_ra - 1]
+            local right_card = G.jokers.cards[my_ra + 1]
+            if SMODS.pseudorandom_probability(card, 'rhyniognatha', card.ability.extra.ddos, card.ability.extra.odds) then
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                local edition = { negative = true}
+                                right_card:set_edition(edition, true)
+                                right_card:juice_up(0.8, 0.5)
+                                card.ability.extra.ddos = 0
+                                return true
+                            end
+                        }))
+                        return {
+                              message = localize('k_reset'),
+                              colour = G.C.RED
+                        }
+                    end
+                if left_card and not left_card.ability.eternal then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                    card.ability.extra.ddos = card.ability.extra.ddos + 1
+                        left_card.getting_sliced = true
+                        SMODS.destroy_cards({left_card}, nil, true)
+                        play_sound('slice1', 0.96, 0.65)
+                        card:juice_up(0.5, 0.5)
+                        return true
+                    end
+                 }))
+                    return {
+                          message = localize('k_mj_probability_increase_ex'),
+                          colour = G.C.GREEN
+                        }
+                    end
+               end
+          end
+        }
