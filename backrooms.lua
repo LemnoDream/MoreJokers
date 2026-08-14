@@ -4,7 +4,7 @@ SMODS.Sound({
     vol = 10,
     pitch = 1,
     key = "music_backrooms",
-    path = "backrooms.wav",
+    path = "backrooms.ogg",
     select_music_track = function()
     return next(find_joker("j_mj_threshold"))
 		and mj_config.mj

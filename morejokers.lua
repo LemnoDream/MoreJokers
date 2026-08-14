@@ -49,7 +49,7 @@ SMODS.Sound({
 })
 SMODS.Sound({
       key = "kachan",
-      path = "ka-chan.wav"
+      path = "ka-chan.ogg"
 })
 SMODS.Sound({
       key = "loopingrooms",
