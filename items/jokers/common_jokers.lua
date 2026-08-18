@@ -332,7 +332,7 @@ SMODS.Joker {
             return {
                 chips = card.ability.extra.chips * #G.jokers.cards,
                 chip_message = {
-                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips * #G.jokers.cards } },
 					colour = G.C.CHIPS
 				}
             }

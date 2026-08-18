@@ -302,7 +302,7 @@ SMODS.Joker {
             return {
                 chips = card.ability.extra.chips * G.GAME.round,
                 chip_message = {
-                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips * G.GAME.round } },
 					colour = G.C.CHIPS
 				}
 			}
@@ -368,7 +368,7 @@ SMODS.Joker {
                     mult = card.ability.extra.mult * G.GAME.hands[text].level,
                     chips = card.ability.extra.chips * G.GAME.hands[text].level,
                     chip_message = {
-                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+                    message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips * G.GAME.hands[text].level } },
 					colour = G.C.CHIPS
 				    }
                 }

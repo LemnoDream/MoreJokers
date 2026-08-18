@@ -470,7 +470,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 3,
     atlas = 'morejokers',
-    cost = 8,
+    cost = 3,
     pos = { x = 9, y = 5 },
     loc_vars = function(self, info_queue, card)
     info_queue[#info_queue+1] = {key = 'e_negative_consumable', set = 'Edition', config = {extra = 1}}
@@ -509,7 +509,7 @@ SMODS.Joker {
 	eternal_compat = true,
     rarity = 3,
     atlas = 'morejokers',
-    cost = 10,
+    cost = 8,
     pos = { x = 0, y = 6 },
     calculate = function(self, card, context)
     if context.selling_card then
